@@ -8,7 +8,7 @@
    Erick Alexander de León Veliz
    Mynor Oswaldo Alvarez Hernández
    Pedro Abraham Cotoc Bustamante
-   Enrique Castañeda
+   Mario Enrique Castañeda Plato
 */
 //Declaracion de constantes para usar los pines
 const int IN1 = 5;
