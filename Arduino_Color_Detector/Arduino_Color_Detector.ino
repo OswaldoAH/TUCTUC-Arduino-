@@ -54,24 +54,28 @@ int SetColor()
     if (Verde - Azul >= 10 && Verde - Azul <= 25 && Verde - ( 2 * Rojo ) >= 8 )
     {
       Serial.println("Color Rojo");
+      estado=false;
       return 1;
     }
 
    else if (Verde - Rojo <= 10 && Verde - Rojo >= -3 && Azul >= Verde)
     {
       Serial.println("Color Amarillo");
+      estado=false;
       return 2;
     }
 
   } else if (Verde < Rojo && Verde < Azul && Verde < 25)
   {
     Serial.println("Color Verde");
+    estado=false;
     return 4;
   }
 
   else if ((Rojo > Verde &&  Azul < Verde) && Azul < 25 && Rojo > 40)
   {
     Serial.println("Color Azul");
+    estado=false;
     return 3;
   }
 }
