@@ -5,13 +5,14 @@ const int s1 = 37;
 const int s2 = 38;
 const int s3 = 39;
 const int out = 40;
-
+const int Hal1 =42;
 // Variables
 int Rojo = 0;
 int Verde = 0;
 int Azul = 0;
 short ColorAnterior = 1;
 Servo cajas;
+bool estado = true;
 void setup()
 {
   Serial.begin(9600);
@@ -20,10 +21,10 @@ void setup()
   pinMode(s2, OUTPUT);
   pinMode(s3, OUTPUT);
   pinMode(out, INPUT);
-
+  pinMode(Hal1,INPUT);
   cajas.attach(41);
   cajas.write(93);
-
+  
   digitalWrite(s0, HIGH);
   digitalWrite(s1, HIGH);
 }
@@ -31,8 +32,12 @@ void setup()
 void loop()
 {
   int valor=SetColor();
-  delay(300);
-  moverCajas(ColorAnterior, valor);
+  while(!estado)
+  {
+    mover(45);
+    estado = digitalRead(Hall);
+    ColorAnterior = moverCajas(ColorAnterior, valor);
+  }
 }
 
 void mover(int grados)
@@ -84,8 +89,16 @@ void color()
   //count OUT, pGreen, Verde
   Verde = pulseIn(out, digitalRead(out) == HIGH ? LOW : HIGH);
 }
-
-void moverCajas(int anterior, int siguiente) {
+void p_cajas(bool estado)
+{
+  if(!estado)
+  {
+    mover_caja(ColorAnterior, valor);
+    delay(2500);
+    estado = true;
+  }
+}
+int moverCajas(int anterior, int siguiente) {
   //1 es rojo
   //2 es amarillo
   //3 es azul
@@ -95,75 +108,19 @@ void moverCajas(int anterior, int siguiente) {
     switch(siguiente){
       case 2: //Mover a amarillo
         mover(95);
-        ColorAnterior = 2;
+        anterior = 2;
         break;
       case 3: //Mover a azul
         mover(95);
-        ColorAnterior = 3;
+        anterior = 3;
         break;
       case 4:  //Mover a verde
         mover(91);
-        ColorAnterior = 4;
+        anterior = 4;
         break;
       default:
         delay(2500);
     }
-  }
-  //Moviéndose de amarillo a otros colores
-  if(anterior == 2) {
-    switch(siguiente){
-      case 1:  //Mover a rojo
-        mover(91);
-        ColorAnterior = 1;
-        break;
-      case 3: //Mover a azul
-        mover(95);
-        ColorAnterior = 3;
-        break;
-      case 4: //Mover a verde
-        mover(91);
-        ColorAnterior = 4;
-        break;
-      default:
-        delay(2500);
-    }
-  }
-  //Moviéndose de azul a otros colores
-  if(anterior == 3) {
-    switch(siguiente){
-      case 2:  //Mover a rojo
-        mover(95);
-        ColorAnterior = 1;
-        break;
-      case 5: //Mover a amarillo
-        mover(95);
-        ColorAnterior = 2;
-        break;
-      case 4: //Mover a verde
-        mover(91);
-        ColorAnterior = 4;
-        break;
-      default:
-        delay(2500);
-    }
-  }
-  //Moviéndose de verde a otros colores
-  if(anterior == 4) {
-    switch(siguiente){
-      case 1:  //Mover a rojo
-        mover(95);
-        ColorAnterior = 1;
-        break;
-      case 2: //Mover a amarillo
-        mover(91);
-        ColorAnterior = 2;
-        break;
-      case 3: //Mover a azul
-        mover(91);
-        ColorAnterior = 3;
-        break;
-      default:
-        delay(2500);
-    }
+    return anterior;
   }
 }
