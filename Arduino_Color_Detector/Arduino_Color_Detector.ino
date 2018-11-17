@@ -5,7 +5,7 @@ const int s1 = 37;
 const int s2 = 38;
 const int s3 = 39;
 const int out = 40;
-const int Hal1 =42;
+const int Hall =42;
 // Variables
 int Rojo = 0;
 int Verde = 0;
@@ -13,6 +13,7 @@ int Azul = 0;
 short ColorAnterior = 1;
 Servo cajas;
 bool estado = true;
+bool estadohall1;
 void setup()
 {
   Serial.begin(9600);
@@ -21,10 +22,9 @@ void setup()
   pinMode(s2, OUTPUT);
   pinMode(s3, OUTPUT);
   pinMode(out, INPUT);
-  pinMode(Hal1,INPUT);
+  pinMode(Hall,INPUT);
   cajas.attach(41);
   cajas.write(93);
-  
   digitalWrite(s0, HIGH);
   digitalWrite(s1, HIGH);
 }
@@ -35,8 +35,8 @@ void loop()
   while(!estado)
   {
     mover(45);
-    estado = digitalRead(Hall);
-    ColorAnterior = moverCajas(ColorAnterior, valor);
+    estadohall1 = digitalRead(Hall);
+    ColorAnterior = moverCajas(ColorAnterior, valor, estadohall1);
   }
 }
 
@@ -93,7 +93,7 @@ void color()
   //count OUT, pGreen, Verde
   Verde = pulseIn(out, digitalRead(out) == HIGH ? LOW : HIGH);
 }
-void p_cajas(bool estado)
+/*void p_cajas(bool estado)
 {
   if(!estado)
   {
@@ -101,14 +101,38 @@ void p_cajas(bool estado)
     delay(2500);
     estado = true;
   }
-}
-int moverCajas(int anterior, int siguiente) {
+}*/
+int moverCajas(int anterior, int entrada, bool sensor) {
   //1 es rojo
   //2 es amarillo
   //3 es azul
   //4 es verde
   //Rojo moviéndose a otro color
-  if(anterior == 1) {
+  if(anterior == entrada)
+  {
+    mover(93);
+    delay(50);
+    //soltar();
+    //delay(2000);
+    estado = true;
+    return anterior;
+  }
+  else
+  {
+    if(!sensor)
+    {
+      mover(93);
+      delay(50);
+      anterior++;
+      if(anterior == 5) anterior = 1;
+      return anterior;
+    }
+    else
+    {
+      mover(95);
+    }
+  }
+  /*if(anterior == 1) {
     switch(siguiente){
       case 2: //Mover a amarillo
         mover(95);
@@ -126,5 +150,5 @@ int moverCajas(int anterior, int siguiente) {
         delay(2500);
     }
     return anterior;
-  }
+  }*/
 }
