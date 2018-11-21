@@ -32,11 +32,10 @@ void setup()
 void loop()
 {
   int valor=SetColor();
-  while(!estado)
-  {
-    mover(45);
-    estadohall1 = digitalRead(Hall);
-    ColorAnterior = moverCajas(ColorAnterior, valor, estadohall1);
+  while(!estado){
+    estadohall1= digitalRead(Hall);
+    ColorAnterior = moverCajas(ColorAnterior,valor,estadohall1);
+    delay(100);
   }
 }
 
@@ -77,6 +76,10 @@ int SetColor()
     Serial.println("Color Azul");
     estado=false;
     return 3;
+  }else
+  {
+    estado = true;
+    return 0;
   }
 }
 
@@ -108,10 +111,10 @@ int moverCajas(int anterior, int entrada, bool sensor) {
   //3 es azul
   //4 es verde
   //Rojo moviéndose a otro color
+        
   if(anterior == entrada)
   {
     mover(93);
-    delay(50);
     //soltar();
     //delay(2000);
     estado = true;
@@ -121,34 +124,20 @@ int moverCajas(int anterior, int entrada, bool sensor) {
   {
     if(!sensor)
     {
-      mover(93);
-      delay(50);
-      anterior++;
-      if(anterior == 5) anterior = 1;
-      return anterior;
+      Serial.print("Anterior: ");
+      Serial.println(anterior);
+      anterior +=1;
+
+        mover(95);
+        delay(50);
+        mover(93);      
+        //estadohall1 == true;
+      if(anterior >= 5) anterior = 1;
     }
     else
     {
-      mover(95);
-    }
-  }
-  /*if(anterior == 1) {
-    switch(siguiente){
-      case 2: //Mover a amarillo
-        mover(95);
-        anterior = 2;
-        break;
-      case 3: //Mover a azul
-        mover(95);
-        anterior = 3;
-        break;
-      case 4:  //Mover a verde
-        mover(91);
-        anterior = 4;
-        break;
-      default:
-        delay(2500);
+      mover(95);   
     }
     return anterior;
-  }*/
+  }
 }
