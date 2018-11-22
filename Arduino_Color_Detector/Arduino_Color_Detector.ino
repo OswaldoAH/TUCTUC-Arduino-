@@ -39,11 +39,6 @@ void loop()
   }
 }
 
-void mover(int grados)
-{
-  cajas.write(grados);
-}
-
 int SetColor()
 {
   color();
@@ -96,15 +91,11 @@ void color()
   //count OUT, pGreen, Verde
   Verde = pulseIn(out, digitalRead(out) == HIGH ? LOW : HIGH);
 }
-/*void p_cajas(bool estado)
+
+void mover(int grados)
 {
-  if(!estado)
-  {
-    mover_caja(ColorAnterior, valor);
-    delay(2500);
-    estado = true;
-  }
-}*/
+  cajas.write(grados);
+}
 int moverCajas(int anterior, int entrada, bool sensor) {
   //1 es rojo
   //2 es amarillo
